@@ -15,16 +15,20 @@ ledObjectRouter.get('/:thingName', async (req, res) => {
     const thingName = req.params.thingName;
     const acceptContentType = req.headers.accept;
 
-    const segmentsMap = await getSegmentsMap(thingName);
-    res.setHeader('etag', segmentsMap.guid.toString());
-
-    if(acceptContentType === 'application/x-protobuf') {
-        const bytes = SegmentsMapConfig.encode(segmentsMap).finish();
-        res.setHeader('content-type', 'application/x-protobuf');
-        res.send(bytes);
-    } else if(!acceptContentType || acceptContentType === 'application/json'  || acceptContentType === '*/*') {
-        res.json(segmentsMap);
-    } else {
-        res.status(415).send(`unsupported type '${acceptContentType}'`);
+    try {
+        const segmentsMap = await getSegmentsMap(thingName);
+        res.setHeader('etag', segmentsMap.guid.toString());
+    
+        if(acceptContentType === 'application/x-protobuf') {
+            const bytes = SegmentsMapConfig.encode(segmentsMap).finish();
+            res.setHeader('content-type', 'application/x-protobuf');
+            res.send(bytes);
+        } else if(!acceptContentType || acceptContentType === 'application/json'  || acceptContentType === '*/*') {
+            res.json(segmentsMap);
+        } else {
+            res.status(415).send(`unsupported type '${acceptContentType}'`);
+        }    
+    } catch (err) {
+        res.sendStatus(404);
     }
 });
