@@ -1,18 +1,16 @@
 # syntax=docker/dockerfile:1
 
-FROM node:14.17.5-alpine as build1
+FROM node:14.17.5-alpine as build
+WORKDIR /build
+COPY ["package.json", "yarn.lock", "./"]
+RUN yarn install
+COPY . .
+RUN yarn build
 
+FROM node:14.17.5-alpine
 ENV NODE_ENV=production
 WORKDIR /app
 COPY ["package.json", "yarn.lock", "./"]
 RUN yarn install --production
-COPY . .
-RUN yarn build
-RUN ls /app
-
-FROM node:14.17.5-alpine
-WORKDIR /app
-COPY --from=build1 /app/node_modules ./node_modules
-COPY --from=build1 /app/dist ./dist
-COPY --from=build1 /app/package.json ./package.json
+COPY --from=build /build/dist ./dist
 CMD [ "yarn", "start:prod" ]
