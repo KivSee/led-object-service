@@ -5,10 +5,14 @@ import { SegmentsMapConfig } from '../proto/segments';
 export const ledObjectRouter = express.Router();
 
 ledObjectRouter.put('/:thingName', async (req, res) => {
-    const segmentsMap = req.body as SegmentsMapConfig;
-    const thingName = req.params.thingName;
-    updateSegmentsMap(thingName, segmentsMap);
-    res.sendStatus(200);
+    try {
+        const segmentsMap = req.body as SegmentsMapConfig;
+        const thingName = req.params.thingName;
+        await updateSegmentsMap(thingName, segmentsMap);
+        res.sendStatus(200);    
+    } catch {
+        res.sendStatus(500);
+    }
 });
 
 ledObjectRouter.get('/:thingName', async (req, res) => {
