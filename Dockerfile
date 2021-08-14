@@ -8,6 +8,7 @@ COPY ["package.json", "yarn.lock", "./"]
 RUN yarn install --production
 COPY . .
 CMD [ "yarn", "build" ]
+RUN ls /app
 
 FROM node:14.17.5-alpine
 WORKDIR /app
