@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+/*
+a single segment with a unique name that identifies it, 
+and the indices (with the right order) that define the segment
+*/
+message SegmentConfig {
+    string name = 1;
+    repeated uint32 indices = 2;
+}
+
+/*
+This message describes all the objects in a single controller.
+They all share a single buffer with number_of_pixels pixels,
+indexed from 0, 1, ..., number_of_pixels - 1
+*/
+message SegmentsMapConfig {
+    fixed32 guid = 1;
+    uint32 number_of_pixels = 2;
+    repeated SegmentConfig segments = 3;
+}
