@@ -22,7 +22,7 @@ ledObjectRouter.get('/:thingName', async (req, res) => {
         const bytes = SegmentsMapConfig.encode(segmentsMap).finish();
         res.setHeader('content-type', 'application/x-protobuf');
         res.send(bytes);
-    } else if(!acceptContentType || acceptContentType === 'application/json') {
+    } else if(!acceptContentType || acceptContentType === 'application/json'  || acceptContentType === '*/*') {
         res.json(segmentsMap);
     } else {
         res.status(415).send(`unsupported type '${acceptContentType}'`);
