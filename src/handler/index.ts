@@ -12,7 +12,7 @@ export const updateSegmentsMap = async (thingName: string, segmentsMap: Segments
     segmentsMap.guid = guid;
     logger.info('creating or updating led object', { guid, thingName });
     await storage.upsert(thingName, segmentsMap);
-    // sendToMqtt(thingName, segmentsMap.guid);
+    sendToMqtt(thingName, JSON.stringify({guid}));
 }
 
 export const getSegmentsMap = async (thingName: string): Promise<SegmentsMapConfig> => {
