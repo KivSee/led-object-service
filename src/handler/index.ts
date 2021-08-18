@@ -1,8 +1,8 @@
 import { SegmentsMapConfig } from "../proto/segments";
-import { createStorageBackaend } from "../services/storage";
+import { createStorageBackend } from "../services/storage";
 import { sendToMqtt } from '../services/mqtt';
 
-const storage = createStorageBackaend();
+const storage = createStorageBackend();
 
 export const updateSegmentsMap = async (thingName: string, segmentsMap: SegmentsMapConfig) => {
     await storage.upsert(thingName, segmentsMap);

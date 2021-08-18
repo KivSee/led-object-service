@@ -25,6 +25,7 @@ ledObjectRouter.get('/:thingName', async (req, res) => {
     
         if(acceptContentType === 'application/x-protobuf') {
             const bytes = SegmentsMapConfig.encode(segmentsMap).finish();
+            console.log(bytes.map(d => d).join(', '));
             res.setHeader('content-type', 'application/x-protobuf');
             res.send(bytes);
         } else if(!acceptContentType || acceptContentType === 'application/json'  || acceptContentType === '*/*') {

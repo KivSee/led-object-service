@@ -2,19 +2,24 @@ import { SegmentsMapConfig } from '../../proto/segments';
 import { Storage } from './storage';
 import fs from 'fs';
 import path from 'path';
+import pino from 'pino';
+
+const logger = pino({ name: 'storage' });
 
 export class GitStorage implements Storage {
 
     constructor(private repo: string) {
-        if(!repo) {
+        if (!repo) {
             throw new Error('git repo directory is empty');
         }
+
+        logger.info('created storage of type git', { repo });
     }
 
     async upsert(name: string, segmentsMap: SegmentsMapConfig) {
-        return new Promise<void>( (resolve, reject) => {
+        return new Promise<void>((resolve, reject) => {
             fs.writeFile(this.thingNameToFileName(name), JSON.stringify(segmentsMap, null, 4), {}, (err) => {
-                if(err) {
+                if (err) {
                     reject(err);
                 } else {
                     resolve();
@@ -24,9 +29,9 @@ export class GitStorage implements Storage {
     }
 
     async read(thingName: string): Promise<SegmentsMapConfig> {
-        return new Promise( (resolve, reject) => {
+        return new Promise((resolve, reject) => {
             fs.readFile(this.thingNameToFileName(thingName), (err, data) => {
-                if(err) {
+                if (err) {
                     reject(err);
                 } else {
                     const segmentsMap = JSON.parse(data.toString()) as SegmentsMapConfig;
@@ -37,9 +42,9 @@ export class GitStorage implements Storage {
     }
 
     async getAllThingNames(): Promise<string[]> {
-        return new Promise( (resolve, reject) => {
+        return new Promise((resolve, reject) => {
             fs.readdir(this.repo, (err, files) => {
-                if(err) {
+                if (err) {
                     reject(err);
                 } else {
                     resolve(files.map(fileName => path.parse(fileName).name));

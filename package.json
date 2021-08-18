@@ -19,11 +19,15 @@
   },
   "dependencies": {
     "@types/node": "^16.6.1",
+    "@types/pino": "^6.3.11",
+    "@types/pino-http": "^5.4.2",
     "dotenv": "^10.0.0",
     "env-var": "^7.0.1",
     "express": "^4.17.1",
     "long": "^4.0.0",
     "mqtt": "^4.2.8",
+    "pino": "^6.13.0",
+    "pino-http": "^5.6.0",
     "protobufjs": "^6.11.2"
   }
 }
