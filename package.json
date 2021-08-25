@@ -8,6 +8,7 @@
   "scripts": {
     "start:dev": "ts-node-dev --respawn src/index.ts",
     "start:prod": "node dist/index.js",
+    "prepare": "husky install",
     "build": "tsc",
     "lint": "gts lint",
     "clean": "gts clean",
@@ -18,8 +19,6 @@
     "@types/node": "^14.11.2",
     "express-routemap": "^1.6.0",
     "gts": "^3.1.0",
-    "husky": "^7.0.2",
-    "lint-staged": "^11.1.2",
     "ts-node-dev": "^1.1.8",
     "ts-proto": "^1.82.5",
     "typescript": "^4.3.5"
@@ -37,16 +36,5 @@
     "pino": "^6.13.0",
     "pino-http": "^5.6.0",
     "protobufjs": "^6.11.2"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "echo hello world "
-    }
-  },
-  "lint-staged": {
-    "**/*.ts": [
-      "yarn lint:fix",
-      "git add"
-    ]
   }
 }
