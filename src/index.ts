@@ -17,7 +17,7 @@ app.use('/health-check', (_req, res) => {
 });
 
 app.listen(SERVER_PORT, () =>
-  logger.info(`server started on port ${SERVER_PORT}`)
+                logger.info(`server started on port ${SERVER_PORT}`)
 );
 
 if (process.env.NODE_ENV?.includes('dev')) {
