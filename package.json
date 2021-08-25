@@ -8,7 +8,6 @@
   "scripts": {
     "start:dev": "ts-node-dev --respawn src/index.ts",
     "start:prod": "node dist/index.js",
-    "prepare": "husky install",
     "build": "tsc",
     "lint": "gts lint",
     "clean": "gts clean",
