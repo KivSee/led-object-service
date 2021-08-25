@@ -40,7 +40,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "echo hello world"
+      "pre-commit": "echo hello world "
     }
   },
   "lint-staged": {
