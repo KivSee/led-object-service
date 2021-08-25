@@ -1,10 +1,10 @@
-import {SegmentsMapConfig} from '../../proto/segments';
-import {Storage} from './storage';
+import { SegmentsMapConfig } from '../../proto/segments';
+import { Storage } from './storage';
 import fs from 'fs';
 import path from 'path';
 import pino from 'pino';
 
-const logger = pino({name: 'storage'});
+const logger = pino({ name: 'storage' });
 
 export class GitStorage implements Storage {
   constructor(private repo: string) {
@@ -12,7 +12,7 @@ export class GitStorage implements Storage {
       throw new Error('git repo directory is empty');
     }
 
-    logger.info('created storage of type git', {repo});
+    logger.info('created storage of type git', { repo });
   }
 
   async upsert(name: string, segmentsMap: SegmentsMapConfig) {

@@ -1,6 +1,6 @@
-import {GIT_STORAGE_REPO, STORAGE_TYPE} from '../../config';
-import {GitStorage} from './git';
-import {Storage} from './storage';
+import { GIT_STORAGE_REPO, STORAGE_TYPE } from '../../config';
+import { GitStorage } from './git';
+import { Storage } from './storage';
 
 export const createStorageBackend = (): Storage => {
   switch (STORAGE_TYPE) {

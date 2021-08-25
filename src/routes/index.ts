@@ -1,6 +1,6 @@
 import express from 'express';
-import {updateSegmentsMap, getSegmentsMap} from '../handler';
-import {SegmentsMapConfig} from '../proto/segments';
+import { updateSegmentsMap, getSegmentsMap } from '../handler';
+import { SegmentsMapConfig } from '../proto/segments';
 
 export const ledObjectRouter = express.Router();
 

@@ -1,8 +1,8 @@
 import express from 'express';
 
 import './services/mqtt';
-import {SERVER_PORT} from './config';
-import {ledObjectRouter} from './routes';
+import { SERVER_PORT } from './config';
+import { ledObjectRouter } from './routes';
 import pino from 'pino';
 import httpLogger from 'pino-http';
 
@@ -17,7 +17,7 @@ app.use('/health-check', (_req, res) => {
 });
 
 app.listen(SERVER_PORT, () =>
-              logger.info(`server started on port ${SERVER_PORT}`)
+  logger.info(`server started on port ${SERVER_PORT}`)
 );
 
 if (process.env.NODE_ENV?.includes('dev')) {
