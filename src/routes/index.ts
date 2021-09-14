@@ -1,6 +1,9 @@
 import express from 'express';
+import pino from 'pino';
 import { updateSegmentsMap, getSegmentsMap } from '../handler';
 import { SegmentsMapConfig } from '../proto/segments';
+
+const logger = pino({ name: 'routes' });
 
 export const ledObjectRouter = express.Router();
 
@@ -37,6 +40,7 @@ ledObjectRouter.get('/:thingName', async (req, res) => {
       res.status(415).send(`unsupported type '${acceptContentType}'`);
     }
   } catch (err) {
+    logger.error(err);
     res.sendStatus(404);
   }
 });
