@@ -2,7 +2,7 @@ import { NodeTracerProvider } from '@opentelemetry/sdk-trace-node';
 import { Resource } from '@opentelemetry/resources';
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
 import { SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base';
-import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-proto';
+import { JaegerExporter } from '@opentelemetry/exporter-jaeger';
 import { registerInstrumentations } from '@opentelemetry/instrumentation';
 import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
 
@@ -14,7 +14,7 @@ const provider = new NodeTracerProvider({
 
 provider.register();
 provider.addSpanProcessor(
-  new SimpleSpanProcessor(new OTLPTraceExporter())
+  new SimpleSpanProcessor(new JaegerExporter())
 );
 
 registerInstrumentations({
