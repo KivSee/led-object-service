@@ -18,5 +18,12 @@ provider.addSpanProcessor(
 );
 
 registerInstrumentations({
-  instrumentations: [new HttpInstrumentation()],
+  instrumentations: [new HttpInstrumentation({
+    headersToSpanAttributes: {
+      server: {
+        requestHeaders: ['accept'],
+        responseHeaders: ['etag'],
+      }
+    }
+  })],
 });
