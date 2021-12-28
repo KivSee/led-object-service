@@ -21,7 +21,7 @@ registerInstrumentations({
   instrumentations: [new HttpInstrumentation({
     headersToSpanAttributes: {
       server: {
-        requestHeaders: ['accept'],
+        requestHeaders: ['accept', 'if-none-match'],
         responseHeaders: ['etag'],
       }
     }
