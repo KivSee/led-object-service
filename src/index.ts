@@ -3,7 +3,7 @@ import express from 'express';
 
 import './services/mqtt';
 import { SERVER_PORT } from './config';
-import { ledObjectRouter } from './routes';
+import { thingsRouter } from './routes';
 import pino from 'pino';
 import httpLogger from 'pino-http';
 
@@ -12,7 +12,7 @@ const logger = pino();
 const app = express();
 app.use(httpLogger());
 app.use(express.json());
-app.use('/led-object', ledObjectRouter);
+app.use('/thing', thingsRouter);
 app.use('/health-check', (_req, res) => {
   res.sendStatus(200);
 });
