@@ -1,4 +1,4 @@
-import { SegmentsMapConfig } from '../../proto/segments';
+import { ThingSegments } from '../../proto/segments';
 import { Storage } from './storage';
 import fs from 'fs';
 import path from 'path';
@@ -15,7 +15,7 @@ export class GitStorage implements Storage {
     logger.info('created storage of type git', { repo });
   }
 
-  async upsert(name: string, segmentsMap: SegmentsMapConfig) {
+  async upsert(name: string, segmentsMap: ThingSegments) {
     return new Promise<void>((resolve, reject) => {
       fs.writeFile(
         this.thingNameToFileName(name),
@@ -32,13 +32,13 @@ export class GitStorage implements Storage {
     });
   }
 
-  async read(thingName: string): Promise<SegmentsMapConfig> {
+  async read(thingName: string): Promise<ThingSegments> {
     return new Promise((resolve, reject) => {
       fs.readFile(this.thingNameToFileName(thingName), (err, data) => {
         if (err) {
           reject(err);
         } else {
-          const segmentsMap = JSON.parse(data.toString()) as SegmentsMapConfig;
+          const segmentsMap = JSON.parse(data.toString()) as ThingSegments;
           resolve(segmentsMap);
         }
       });

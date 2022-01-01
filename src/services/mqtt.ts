@@ -20,6 +20,7 @@ export const sendToMqtt = async (
 ) => {
   client.publish(mqttTopic(thingName), payload, {
     qos: 1,
+    retain: true,
   });
 };
 

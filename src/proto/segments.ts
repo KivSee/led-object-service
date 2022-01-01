@@ -2,66 +2,58 @@
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 
-export const protobufPackage = "";
+export const protobufPackage = "kivsee.proto";
+
+export interface Pixel {
+  index: number;
+  relPos: number;
+}
 
 /**
  * a single segment with a unique name that identifies it,
- * and the indices (with the right order) that define the segment
+ * and the pixels that define the segment.
  */
-export interface SegmentConfig {
+export interface Segment {
   name: string;
-  indices: number[];
+  pixels: Pixel[];
 }
 
 /**
- * This message describes all the objects in a single controller.
+ * This message describes all the segments in a single controller.
  * They all share a single buffer with number_of_pixels pixels,
  * indexed from 0, 1, ..., number_of_pixels - 1
  */
-export interface SegmentsMapConfig {
+export interface ThingSegments {
   guid: number;
   numberOfPixels: number;
-  segments: SegmentConfig[];
+  segments: Segment[];
 }
 
-const baseSegmentConfig: object = { name: "", indices: 0 };
+const basePixel: object = { index: 0, relPos: 0 };
 
-export const SegmentConfig = {
-  encode(
-    message: SegmentConfig,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
-    if (message.name !== "") {
-      writer.uint32(10).string(message.name);
+export const Pixel = {
+  encode(message: Pixel, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.index !== 0) {
+      writer.uint32(8).uint32(message.index);
     }
-    writer.uint32(18).fork();
-    for (const v of message.indices) {
-      writer.uint32(v);
+    if (message.relPos !== 0) {
+      writer.uint32(21).float(message.relPos);
     }
-    writer.ldelim();
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): SegmentConfig {
+  decode(input: _m0.Reader | Uint8Array, length?: number): Pixel {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseSegmentConfig } as SegmentConfig;
-    message.indices = [];
+    const message = { ...basePixel } as Pixel;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.name = reader.string();
+          message.index = reader.uint32();
           break;
         case 2:
-          if ((tag & 7) === 2) {
-            const end2 = reader.uint32() + reader.pos;
-            while (reader.pos < end2) {
-              message.indices.push(reader.uint32());
-            }
-          } else {
-            message.indices.push(reader.uint32());
-          }
+          message.relPos = reader.float();
           break;
         default:
           reader.skipType(tag & 7);
@@ -71,55 +63,131 @@ export const SegmentConfig = {
     return message;
   },
 
-  fromJSON(object: any): SegmentConfig {
-    const message = { ...baseSegmentConfig } as SegmentConfig;
-    message.indices = [];
-    if (object.name !== undefined && object.name !== null) {
-      message.name = String(object.name);
+  fromJSON(object: any): Pixel {
+    const message = { ...basePixel } as Pixel;
+    if (object.index !== undefined && object.index !== null) {
+      message.index = Number(object.index);
     } else {
-      message.name = "";
+      message.index = 0;
     }
-    if (object.indices !== undefined && object.indices !== null) {
-      for (const e of object.indices) {
-        message.indices.push(Number(e));
+    if (object.relPos !== undefined && object.relPos !== null) {
+      message.relPos = Number(object.relPos);
+    } else {
+      message.relPos = 0;
+    }
+    return message;
+  },
+
+  toJSON(message: Pixel): unknown {
+    const obj: any = {};
+    message.index !== undefined && (obj.index = message.index);
+    message.relPos !== undefined && (obj.relPos = message.relPos);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<Pixel>): Pixel {
+    const message = { ...basePixel } as Pixel;
+    if (object.index !== undefined && object.index !== null) {
+      message.index = object.index;
+    } else {
+      message.index = 0;
+    }
+    if (object.relPos !== undefined && object.relPos !== null) {
+      message.relPos = object.relPos;
+    } else {
+      message.relPos = 0;
+    }
+    return message;
+  },
+};
+
+const baseSegment: object = { name: "" };
+
+export const Segment = {
+  encode(
+    message: Segment,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    if (message.name !== "") {
+      writer.uint32(10).string(message.name);
+    }
+    for (const v of message.pixels) {
+      Pixel.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): Segment {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseSegment } as Segment;
+    message.pixels = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.name = reader.string();
+          break;
+        case 2:
+          message.pixels.push(Pixel.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
     }
     return message;
   },
 
-  toJSON(message: SegmentConfig): unknown {
+  fromJSON(object: any): Segment {
+    const message = { ...baseSegment } as Segment;
+    message.pixels = [];
+    if (object.name !== undefined && object.name !== null) {
+      message.name = String(object.name);
+    } else {
+      message.name = "";
+    }
+    if (object.pixels !== undefined && object.pixels !== null) {
+      for (const e of object.pixels) {
+        message.pixels.push(Pixel.fromJSON(e));
+      }
+    }
+    return message;
+  },
+
+  toJSON(message: Segment): unknown {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
-    if (message.indices) {
-      obj.indices = message.indices.map((e) => e);
+    if (message.pixels) {
+      obj.pixels = message.pixels.map((e) => (e ? Pixel.toJSON(e) : undefined));
     } else {
-      obj.indices = [];
+      obj.pixels = [];
     }
     return obj;
   },
 
-  fromPartial(object: DeepPartial<SegmentConfig>): SegmentConfig {
-    const message = { ...baseSegmentConfig } as SegmentConfig;
-    message.indices = [];
+  fromPartial(object: DeepPartial<Segment>): Segment {
+    const message = { ...baseSegment } as Segment;
+    message.pixels = [];
     if (object.name !== undefined && object.name !== null) {
       message.name = object.name;
     } else {
       message.name = "";
     }
-    if (object.indices !== undefined && object.indices !== null) {
-      for (const e of object.indices) {
-        message.indices.push(e);
+    if (object.pixels !== undefined && object.pixels !== null) {
+      for (const e of object.pixels) {
+        message.pixels.push(Pixel.fromPartial(e));
       }
     }
     return message;
   },
 };
 
-const baseSegmentsMapConfig: object = { guid: 0, numberOfPixels: 0 };
+const baseThingSegments: object = { guid: 0, numberOfPixels: 0 };
 
-export const SegmentsMapConfig = {
+export const ThingSegments = {
   encode(
-    message: SegmentsMapConfig,
+    message: ThingSegments,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.guid !== 0) {
@@ -129,15 +197,15 @@ export const SegmentsMapConfig = {
       writer.uint32(16).uint32(message.numberOfPixels);
     }
     for (const v of message.segments) {
-      SegmentConfig.encode(v!, writer.uint32(26).fork()).ldelim();
+      Segment.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): SegmentsMapConfig {
+  decode(input: _m0.Reader | Uint8Array, length?: number): ThingSegments {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseSegmentsMapConfig } as SegmentsMapConfig;
+    const message = { ...baseThingSegments } as ThingSegments;
     message.segments = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -149,7 +217,7 @@ export const SegmentsMapConfig = {
           message.numberOfPixels = reader.uint32();
           break;
         case 3:
-          message.segments.push(SegmentConfig.decode(reader, reader.uint32()));
+          message.segments.push(Segment.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -159,8 +227,8 @@ export const SegmentsMapConfig = {
     return message;
   },
 
-  fromJSON(object: any): SegmentsMapConfig {
-    const message = { ...baseSegmentsMapConfig } as SegmentsMapConfig;
+  fromJSON(object: any): ThingSegments {
+    const message = { ...baseThingSegments } as ThingSegments;
     message.segments = [];
     if (object.guid !== undefined && object.guid !== null) {
       message.guid = Number(object.guid);
@@ -174,20 +242,20 @@ export const SegmentsMapConfig = {
     }
     if (object.segments !== undefined && object.segments !== null) {
       for (const e of object.segments) {
-        message.segments.push(SegmentConfig.fromJSON(e));
+        message.segments.push(Segment.fromJSON(e));
       }
     }
     return message;
   },
 
-  toJSON(message: SegmentsMapConfig): unknown {
+  toJSON(message: ThingSegments): unknown {
     const obj: any = {};
     message.guid !== undefined && (obj.guid = message.guid);
     message.numberOfPixels !== undefined &&
       (obj.numberOfPixels = message.numberOfPixels);
     if (message.segments) {
       obj.segments = message.segments.map((e) =>
-        e ? SegmentConfig.toJSON(e) : undefined
+        e ? Segment.toJSON(e) : undefined
       );
     } else {
       obj.segments = [];
@@ -195,8 +263,8 @@ export const SegmentsMapConfig = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<SegmentsMapConfig>): SegmentsMapConfig {
-    const message = { ...baseSegmentsMapConfig } as SegmentsMapConfig;
+  fromPartial(object: DeepPartial<ThingSegments>): ThingSegments {
+    const message = { ...baseThingSegments } as ThingSegments;
     message.segments = [];
     if (object.guid !== undefined && object.guid !== null) {
       message.guid = object.guid;
@@ -210,7 +278,7 @@ export const SegmentsMapConfig = {
     }
     if (object.segments !== undefined && object.segments !== null) {
       for (const e of object.segments) {
-        message.segments.push(SegmentConfig.fromPartial(e));
+        message.segments.push(Segment.fromPartial(e));
       }
     }
     return message;

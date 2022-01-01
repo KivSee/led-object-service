@@ -1,7 +1,7 @@
-import { SegmentsMapConfig } from '../../proto/segments';
+import { ThingSegments } from '../../proto/segments';
 
 export interface Storage {
-  upsert: (name: string, segmentsMap: SegmentsMapConfig) => Promise<void>;
-  read: (thingName: string) => Promise<SegmentsMapConfig>;
+  upsert: (name: string, segmentsMap: ThingSegments) => Promise<void>;
+  read: (thingName: string) => Promise<ThingSegments>;
   getAllThingNames: () => Promise<string[]>;
 }
