@@ -1,5 +1,6 @@
 import './instrument';
 import express from 'express';
+import cors from 'cors';
 
 import './services/mqtt';
 import { SERVER_PORT } from './config';
@@ -11,6 +12,7 @@ const logger = pino();
 
 const app = express();
 app.use(httpLogger());
+app.use(cors());
 app.use(express.json());
 app.use('/thing', thingsRouter);
 app.use('/health-check', (_req, res) => {
