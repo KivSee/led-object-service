@@ -1,4 +1,3 @@
-import { ThingSegments } from '../../proto/segments';
 import { Storage } from './storage';
 import { writeFile, readFile, readdir } from 'fs/promises';
 import path from 'path';
@@ -17,15 +16,22 @@ export class GitStorage implements Storage {
   }
 
   async upsert(name: string, thing: Thing) {
-    await writeFile(this.thingNameToFileName(name), JSON.stringify(thing, null, 4));
+    await writeFile(
+      this.thingNameToFileName(name),
+      JSON.stringify(thing, null, 4)
+    );
   }
 
   async read(thingName: string): Promise<Thing> {
-    return JSON.parse(await readFile(this.thingNameToFileName(thingName), { encoding: 'utf8'}));
+    return JSON.parse(
+      await readFile(this.thingNameToFileName(thingName), { encoding: 'utf8' })
+    );
   }
 
   async getAllThingNames(): Promise<string[]> {
-    return (await readdir(this.repo)).map(fileName => path.parse(fileName).name);
+    return (await readdir(this.repo)).map(
+      fileName => path.parse(fileName).name
+    );
   }
 
   private thingNameToFileName(thingName: string) {

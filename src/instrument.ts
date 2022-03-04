@@ -13,17 +13,17 @@ const provider = new NodeTracerProvider({
 });
 
 provider.register();
-provider.addSpanProcessor(
-  new SimpleSpanProcessor(new JaegerExporter())
-);
+provider.addSpanProcessor(new SimpleSpanProcessor(new JaegerExporter()));
 
 registerInstrumentations({
-  instrumentations: [new HttpInstrumentation({
-    headersToSpanAttributes: {
-      server: {
-        requestHeaders: ['accept', 'if-none-match'],
-        responseHeaders: ['etag'],
-      }
-    }
-  })],
+  instrumentations: [
+    new HttpInstrumentation({
+      headersToSpanAttributes: {
+        server: {
+          requestHeaders: ['accept', 'if-none-match'],
+          responseHeaders: ['etag'],
+        },
+      },
+    }),
+  ],
 });

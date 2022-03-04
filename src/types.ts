@@ -1,6 +1,5 @@
-import { ThingSegments } from "./proto/segments";
+import { ThingSegments } from './proto/segments';
 
 export interface Thing extends ThingSegments {
-    thingName: string;
+  thingName: string;
 }
-
