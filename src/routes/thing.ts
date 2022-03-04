@@ -1,7 +1,8 @@
 import express from 'express';
 import pino from 'pino';
-import { updateSegmentsMap, getSegmentsMap } from '../handler';
+import { updateThingConfig, getSegmentsMap } from '../handler';
 import { ThingSegments } from '../proto/segments';
+import { Thing } from '../types';
 
 const logger = pino({ name: 'routes' });
 
@@ -9,10 +10,15 @@ export const thingsRouter = express.Router();
 
 thingsRouter.put('/:thingName', async (req, res) => {
   try {
-    const segmentsMap = req.body as ThingSegments;
+    const thingConfig = req.body as Thing;
     const thingName = req.params.thingName;
+    const thingNameInBody = thingConfig.thingName;
+    if(thingNameInBody && thingNameInBody !== thingName) {
+      return res.status(400).send(`thing name in route "${thingName}" is different from value in body ${thingConfig.thingName}`);
+    }
+
     // temporary, calculate the relative pos for each pixel
-    segmentsMap.segments.forEach(segment => {
+    thingConfig.segments.forEach(segment => {
         const totalPixels = segment.pixels.length;
         if(totalPixels <= 0) {
             return;
@@ -28,7 +34,7 @@ thingsRouter.put('/:thingName', async (req, res) => {
         });
     });
 
-    await updateSegmentsMap(thingName, segmentsMap);
+    await updateThingConfig(thingName, thingConfig);
     res.sendStatus(200);
   } catch {
     res.sendStatus(500);

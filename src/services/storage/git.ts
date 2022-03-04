@@ -1,8 +1,9 @@
 import { ThingSegments } from '../../proto/segments';
 import { Storage } from './storage';
-import fs from 'fs';
+import { writeFile, readFile, readdir } from 'fs/promises';
 import path from 'path';
 import pino from 'pino';
+import { Thing } from '../../types';
 
 const logger = pino({ name: 'storage' });
 
@@ -15,46 +16,16 @@ export class GitStorage implements Storage {
     logger.info('created storage of type git', { repo });
   }
 
-  async upsert(name: string, segmentsMap: ThingSegments) {
-    return new Promise<void>((resolve, reject) => {
-      fs.writeFile(
-        this.thingNameToFileName(name),
-        JSON.stringify(segmentsMap, null, 4),
-        {},
-        err => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve();
-          }
-        }
-      );
-    });
+  async upsert(name: string, thing: Thing) {
+    await writeFile(this.thingNameToFileName(name), JSON.stringify(thing, null, 4));
   }
 
-  async read(thingName: string): Promise<ThingSegments> {
-    return new Promise((resolve, reject) => {
-      fs.readFile(this.thingNameToFileName(thingName), (err, data) => {
-        if (err) {
-          reject(err);
-        } else {
-          const segmentsMap = JSON.parse(data.toString()) as ThingSegments;
-          resolve(segmentsMap);
-        }
-      });
-    });
+  async read(thingName: string): Promise<Thing> {
+    return JSON.parse(await readFile(this.thingNameToFileName(thingName), { encoding: 'utf8'}));
   }
 
   async getAllThingNames(): Promise<string[]> {
-    return new Promise((resolve, reject) => {
-      fs.readdir(this.repo, (err, files) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(files.map(fileName => path.parse(fileName).name));
-        }
-      });
-    });
+    return (await readdir(this.repo)).map(fileName => path.parse(fileName).name);
   }
 
   private thingNameToFileName(thingName: string) {
