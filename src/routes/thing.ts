@@ -1,6 +1,6 @@
 import express from 'express';
 import pino from 'pino';
-import { updateThingConfig, getSegmentsMap } from '../handler';
+import { updateThingConfig, getThingConfig, getThingNames } from '../handler';
 import { ThingSegments } from '../proto/segments';
 import { Thing } from '../types';
 
@@ -23,6 +23,7 @@ const validateThingNameMiddleware = (
         `thing name in route "${thingName}" is different from value in body ${thingConfig.thingName}`
       );
   }
+  thingConfig.thingName = thingName;
   next();
 };
 
@@ -64,7 +65,7 @@ thingsRouter.get('/:thingName', async (req, res) => {
   const acceptContentType = req.headers.accept;
 
   try {
-    const segmentsMap = await getSegmentsMap(thingName);
+    const segmentsMap = await getThingConfig(thingName);
     res.setHeader('etag', segmentsMap.guid.toString());
 
     if (acceptContentType === 'application/x-protobuf') {
@@ -84,4 +85,20 @@ thingsRouter.get('/:thingName', async (req, res) => {
     logger.error(err);
     res.sendStatus(404);
   }
+});
+
+thingsRouter.get('', async (req: express.Request, res: express.Response) => {
+  try {
+    const thingNames = await getThingNames();
+    const thingWithConfig = await Promise.all(thingNames.map(async (thingName) => {
+      const fullConfig = await getThingConfig(thingName);
+      const slimConfig = { ...fullConfig, segments: fullConfig.segments.map(segment => ({ name: segment.name}))};
+      return [thingName, slimConfig]
+    }));
+    res.json(Object.fromEntries(new Map(thingWithConfig as [string, unknown][])));
+  } catch (err: any) {
+    logger.error(err);
+    res.sendStatus(500);
+  }
+
 });

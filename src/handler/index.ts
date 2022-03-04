@@ -19,8 +19,12 @@ export const updateThingConfig = async (
   sendToMqtt(thingName, JSON.stringify({ guid }));
 };
 
-export const getSegmentsMap = async (
+export const getThingConfig = async (
   thingName: string
-): Promise<ThingSegments> => {
+): Promise<Thing> => {
   return await storage.read(thingName);
 };
+
+export const getThingNames = async (): Promise<string[]> => {
+  return await storage.getAllThingNames();
+}
