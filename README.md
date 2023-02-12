@@ -14,7 +14,7 @@ SERVER_PORT=8081
 ```
 
 ### Endpoints:
-- PUT `led-object/:thingName` - upsert configuration for an object. Payload should be `application/json` in the following format:
+- PUT `thing/:thingName` - upsert configuration for an object. Payload should be `application/json` in the following format:
 ```json
 {
 	"numberOfPixels": 13,
@@ -28,7 +28,7 @@ SERVER_PORT=8081
 }
 ```
 
-- GET `led-object/:thingName` - get object configuration for `thingName`. You can set `Content-Type` to either `application/json` or `application/x-protobuf`. 
+- GET `thing/:thingName` - get object configuration for `thingName`. You can set `Content-Type` to either `application/json` or `application/x-protobuf`. 
 
 ## MQTT broker
 The service connects to an mqtt broker which is used to update controllers on a change in configuration.
