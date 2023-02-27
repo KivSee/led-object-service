@@ -34,24 +34,6 @@ thingsRouter.put(
     try {
       const thingConfig = req.body as Thing;
       const thingName = req.params.thingName;
-
-      // temporary, calculate the relative pos for each pixel
-      thingConfig.segments.forEach(segment => {
-        const totalPixels = segment.pixels.length;
-        if (totalPixels <= 0) {
-          return;
-        }
-        if (totalPixels === 1) {
-          // we only have one pixel in the segment. cannot calculate relative pos
-          segment.pixels[0].relPos = 0.5;
-          return;
-        }
-
-        segment.pixels.forEach((pixel, index) => {
-          pixel.relPos = index / (totalPixels - 1);
-        });
-      });
-
       await updateThingConfig(thingName, thingConfig);
       res.sendStatus(200);
     } catch {

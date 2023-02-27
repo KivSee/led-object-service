@@ -20,10 +20,24 @@ SERVER_PORT=8081
 	"numberOfPixels": 13,
 	"segments": [{
 		"name": "left",
-		"indices": [1, 2, 3, 5]
+		"pixels": [
+            {
+                "index": 0,
+                "relPos": 0.0
+            },
+            {
+                "index": 1,
+                "relPos": 0.5
+            }
+        ]
 	}, {
 		"name": "right",
-		"indices": [4, 2, 6, 7, 8]
+		"pixels": [
+            {
+                "index": 4,
+                "relPos": 0.5
+            }
+        ]
 	}]
 }
 ```
