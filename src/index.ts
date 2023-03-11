@@ -4,7 +4,7 @@ import displayRoutes from 'express-routemap';
 import cors from 'cors';
 
 import './services/mqtt';
-import { SERVER_PORT } from './config';
+import { isDev, SERVER_PORT } from './config';
 import { thingsRouter } from './routes';
 import pino from 'pino';
 import httpLogger from 'pino-http';
@@ -28,7 +28,9 @@ app.listen(SERVER_PORT, () => {
 if (process.env.NODE_ENV?.includes('dev')) {
   try {
     const displayRoutes = require('express-routemap'); // eslint-disable-line node/no-unpublished-require
-    displayRoutes(app);
+    if (isDev) {
+      displayRoutes(app);
+    }
   } catch (err) {
     logger.err('failed to print express route map', err);
   }

@@ -6,3 +6,6 @@ export const SERVER_PORT = env.get('SERVER_PORT').required().asPortNumber();
 
 export const STORAGE_TYPE = env.get('STORAGE_TYPE').asEnum(['git']);
 export const GIT_STORAGE_REPO = env.get('GIT_STORAGE_REPO').asString();
+
+export const NODE_ENV = env.get('NODE_ENV').asString();
+export const isDev = NODE_ENV === 'development';
