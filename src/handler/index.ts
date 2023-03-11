@@ -19,12 +19,10 @@ export const updateThingConfig = async (
   sendToMqtt(thingName, JSON.stringify({ guid }));
 };
 
-export const getThingConfig = async (
-  thingName: string
-): Promise<Thing> => {
+export const getThingConfig = async (thingName: string): Promise<Thing> => {
   return await storage.read(thingName);
 };
 
 export const getThingNames = async (): Promise<string[]> => {
   return await storage.getAllThingNames();
-}
+};

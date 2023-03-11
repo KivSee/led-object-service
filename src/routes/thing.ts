@@ -72,15 +72,23 @@ thingsRouter.get('/:thingName', async (req, res) => {
 thingsRouter.get('', async (req: express.Request, res: express.Response) => {
   try {
     const thingNames = await getThingNames();
-    const thingWithConfig = await Promise.all(thingNames.map(async (thingName) => {
-      const fullConfig = await getThingConfig(thingName);
-      const slimConfig = { ...fullConfig, segments: fullConfig.segments.map(segment => ({ name: segment.name}))};
-      return [thingName, slimConfig]
-    }));
-    res.json(Object.fromEntries(new Map(thingWithConfig as [string, unknown][])));
+    const thingWithConfig = await Promise.all(
+      thingNames.map(async thingName => {
+        const fullConfig = await getThingConfig(thingName);
+        const slimConfig = {
+          ...fullConfig,
+          segments: fullConfig.segments.map(segment => ({
+            name: segment.name,
+          })),
+        };
+        return [thingName, slimConfig];
+      })
+    );
+    res.json(
+      Object.fromEntries(new Map(thingWithConfig as [string, unknown][]))
+    );
   } catch (err: any) {
     logger.error(err);
     res.sendStatus(500);
   }
-
 });

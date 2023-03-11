@@ -13,13 +13,16 @@
     "clean": "gts clean",
     "lint:fix": "gts fix"
   },
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "devDependencies": {
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
+    "@types/express-routemap": "^1.1.1",
     "@types/node": "^16.6.1",
     "@types/pino": "^6.3.11",
     "@types/pino-http": "^5.4.2",
-    "express-routemap": "^1.6.0",
     "gts": "^3.1.0",
     "ts-node-dev": "^1.1.8",
     "ts-proto": "^1.82.5",
@@ -38,6 +41,7 @@
     "dotenv": "^10.0.0",
     "env-var": "^7.0.1",
     "express": "^4.17.1",
+    "express-routemap": "^1.6.0",
     "long": "^4.0.0",
     "mqtt": "^4.2.8",
     "object-hash": "^2.2.0",

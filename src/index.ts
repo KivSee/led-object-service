@@ -1,5 +1,6 @@
 import './instrument';
 import express from 'express';
+import displayRoutes from 'express-routemap';
 import cors from 'cors';
 
 import './services/mqtt';
@@ -13,15 +14,16 @@ const logger = pino();
 const app = express();
 app.use(httpLogger());
 app.use(cors());
-app.use(express.json({limit: '10mb'}));
+app.use(express.json({ limit: '10mb' }));
 app.use('/thing', thingsRouter);
 app.use('/health-check', (_req, res) => {
   res.sendStatus(200);
 });
 
-app.listen(SERVER_PORT, () =>
-  logger.info(`server started on port ${SERVER_PORT}`)
-);
+app.listen(SERVER_PORT, () => {
+  logger.info(`server started on port ${SERVER_PORT}`);
+  displayRoutes(app);
+});
 
 if (process.env.NODE_ENV?.includes('dev')) {
   try {
